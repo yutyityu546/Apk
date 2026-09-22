@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Atmospheres Player</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+</head>
+<body>
+
+  <!-- Парящий стеклянный Dynamic Island -->
+  <header class="floating-island">
+    <div class="island-brand">
+      <div class="island-dot" id="streamDot"></div>
+      <span class="island-title">Atmospheres Player</span>
+    </div>
+
+    <button class="island-settings-btn" id="settingsBtn" title="Вставить ссылку YouTube">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Шторка ввода ссылки -->
+  <div class="stream-drawer" id="streamDrawer">
+    <div class="drawer-input-row">
+      <input 
+        type="text" 
+        class="stream-url-input" 
+        id="ytUrlInput" 
+        placeholder="Ссылка на трек YouTube..." 
+      />
+      <button class="stream-load-btn" id="ytLoadBtn">Play</button>
+    </div>
+  </div>
+
+  <!-- Фоновые слои -->
+  <img 
+    src="https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=1600&auto=format&fit=crop" 
+    alt="Pink Sky Background" 
+    class="bg-layer"
+  />
+  <div class="bg-overlay-dark"></div>
+  <div class="bg-overlay-light"></div>
+
+  <!-- Карточка Liquid Glass (280px) -->
+  <div class="ios-glass-card" id="card">
+    
+    <div class="chamber-glass chamber-dark"></div>
+    <div class="chamber-glass chamber-light"></div>
+
+    <div class="card-content-wrap">
+      <div class="track-header">
+        <div class="cover-lens" id="coverLens">
+          <img 
+            id="coverImg" 
+            src="https://img.youtube.com/vi/maDrQPge89g/hqdefault.jpg" 
+            alt="Cover" 
+            class="cover-img"
+          />
+        </div>
+        
+        <div class="info-box">
+          <h1 class="track-title" id="trackTitle">Санта Клаус</h1>
+          <p class="track-artist" id="trackArtist">Платина</p>
+        </div>
+
+        <button class="theme-toggle-btn" id="themeBtn" title="Сменить тему">
+          <div class="icon-slot">
+            <svg class="moon-svg" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="sun-svg" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <!-- Fluid Morph зона описания -->
+      <div class="desc-morph-wrapper" id="descWrapper">
+        <div class="desc-morph-pill" id="descPill">
+          <div class="pill-label-state">
+            <span>Показать описание</span>
+            <svg viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="pill-text-state" id="pillText" title="Нажмите, чтобы скрыть">
+            Прямое воспроизведение через официальный API YouTube.
+          </div>
+        </div>
+      </div>
+
+      <!-- Скруббер (оригинальный белый цвет) -->
+      <div class="player-progress-area">
+        <div class="progress-track-wrapper" id="trackWrapper">
+          <div class="progress-rail">
+            <div class="progress-fill-gpu" id="progressFill"></div>
+          </div>
+          <div class="progress-thumb-gpu" id="progressThumb"></div>
+        </div>
+        <div class="time-digits">
+          <span id="curTime">0:00</span>
+          <span id="durTime">0:00</span>
+        </div>
+      </div>
+
+      <!-- Кнопки управления -->
+      <div class="controls-row">
+        <button class="ios-btn btn-capsule" id="playBtn">
+          <div class="sound-bars" id="soundBars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+          <span id="btnText">Play</span>
+        </button>
+
+        <button class="ios-btn btn-circle" id="prevBtn" title="Назад 15s">
+          <svg viewBox="0 0 24 24">
+            <polygon points="19 20 9 12 19 4 19 20" fill="currentColor"></polygon>
+            <line x1="5" y1="19" x2="5" y2="5"></line>
+          </svg>
+        </button>
+
+        <button class="ios-btn btn-circle" id="nextBtn" title="Вперед 15s">
+          <svg viewBox="0 0 24 24">
+            <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"></polygon>
+            <line x1="19" y1="5" x2="19" y2="19"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Скрытый фрейм официального API (полностью невидим, не перекрывает UI) -->
+  <div style="position: absolute; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; overflow: hidden; top: -100px;">
+    <div id="ytPlayer"></div>
+  </div>
+
+  <script>
+    /* 1. СМЕНА ТЕМЫ */
+    const themeBtn = document.getElementById('themeBtn');
+    let isLightMode = false;
+    themeBtn.addEventListener('click', () => {
+      isLightMode = !isLightMode;
+      document.body.classList.toggle('is-light-mode', isLightMode);
+    }, { passive: true });
+
+    /* 2. FLUID MORPH ОПИСАНИЯ */
+    const descPill = document.getElementById('descPill');
+    const descWrapper = document.getElementById('descWrapper');
+    descPill.addEventListener('click', () => {
+      const willOpen = !descPill.classList.contains('is-open');
+      descPill.classList.toggle('is-open', willOpen);
+      descWrapper.classList.toggle('is-open', willOpen);
+    }, { passive: true });
+
+    /* 3. НАДЕЖНЫЙ ОФИЦИАЛЬНЫЙ ДВИЖОК */
+    let player;
+    let isPlaying = false;
+    let currentSeconds = 0;
+    let totalSeconds = 0;
+    let isDragging = false;
+    let pollInterval = null;
+
+    const playBtn = document.getElementById('playBtn');
+    const btnText = document.getElementById('btnText');
+    const soundBars = document.getElementById('soundBars');
+    const trackTitle = document.getElementById('trackTitle');
+    const trackArtist = document.getElementById('trackArtist');
+    const pillText = document.getElementById('pillText');
+    const streamDot = document.getElementById('streamDot');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const coverImg = document.getElementById('coverImg');
+
+    const trackWrapper = document.getElementById('trackWrapper');
+    const progressFill = document.getElementById('progressFill');
+    const progressThumb = document.getElementById('progressThumb');
+    const curTimeEl = document.getElementById('curTime');
+    const durTimeEl = document.getElementById('durTime');
+
+    const settingsBtn = document.getElementById('settingsBtn');
+    const streamDrawer = document.getElementById('streamDrawer');
+    const ytUrlInput = document.getElementById('ytUrlInput');
+    const ytLoadBtn = document.getElementById('ytLoadBtn');
+
+    let cachedWidth = trackWrapper.clientWidth || 248;
+    let cachedRect = null;
+
+    settingsBtn.addEventListener('click', () => {
+      streamDrawer.classList.toggle('is-open');
+      if (streamDrawer.classList.contains('is-open')) {
+        ytUrlInput.focus();
+      }
+    });
+
+    function formatTime(sec) {
+      if (!sec || isNaN(sec)) return '0:00';
+      sec = Math.floor(sec);
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function renderProgress() {
+      if (totalSeconds <= 0) return;
+      const progress = Math.max(0, Math.min(1, currentSeconds / totalSeconds));
+      progressFill.style.transform = `scaleX(${progress}) translate3d(0, 0, 0)`;
+      const exactX = progress * cachedWidth;
+      progressThumb.style.transform = `translate3d(${exactX}px, -50%, 0)`;
+      curTimeEl.textContent = formatTime(currentSeconds);
+    }
+
+    function refreshMetrics() {
+      cachedRect = trackWrapper.getBoundingClientRect();
+      cachedWidth = cachedRect.width;
+      renderProgress();
+    }
+    window.addEventListener('resize', refreshMetrics, { passive: true });
+
+    function setPlayingState(playing) {
+      isPlaying = playing;
+      if (playing) {
+        soundBars.classList.remove('is-paused');
+        btnText.textContent = 'Playing';
+        streamDot.classList.add('is-active');
+        coverImg.style.animationPlayState = 'running';
+      } else {
+        soundBars.classList.add('is-paused');
+        btnText.textContent = 'Paused';
+        streamDot.classList.remove('is-active');
+        coverImg.style.animationPlayState = 'paused';
+      }
+    }
+
+    window.onYouTubeIframeAPIReady = function() {
+      player = new YT.Player('ytPlayer', {
+        height: '100%',
+        width: '100%',
+        videoId: 'maDrQPge89g',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          rel: 0,
+          playsinline: 1,
+          enablejsapi: 1,
+          origin: window.location.origin
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange
+        }
+      });
+    };
+
+    function onPlayerReady() {
+      totalSeconds = player.getDuration() || 0;
+      durTimeEl.textContent = formatTime(totalSeconds);
+      refreshMetrics();
+
+      pollInterval = setInterval(() => {
+        if (player && isPlaying && !isDragging) {
+          currentSeconds = player.getCurrentTime() || 0;
+          totalSeconds = player.getDuration() || totalSeconds;
+          durTimeEl.textContent = formatTime(totalSeconds);
+          renderProgress();
+        }
+      }, 250);
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        setPlayingState(true);
+        totalSeconds = player.getDuration() || totalSeconds;
+        durTimeEl.textContent = formatTime(totalSeconds);
+      } else if (event.data === YT.PlayerState.PAUSED) {
+        setPlayingState(false);
+      } else if (event.data === YT.PlayerState.ENDED) {
+        setPlayingState(false);
+        currentSeconds = 0;
+        renderProgress();
+      }
+    }
+
+    // Воспроизведение ТОЛЬКО по кнопке Play
+    playBtn.addEventListener('click', () => {
+      if (!player || typeof player.playVideo !== 'function') return;
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.unMute();
+        player.setVolume(100);
+        player.playVideo();
+      }
+    });
+
+    function extractYouTubeID(input) {
+      if (!input) return null;
+      input = input.trim();
+      const match = input.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|embed\/|v\/|shorts\/))([\w-]{11})/i);
+      return match ? match[1] : (/^[\w-]{11}$/.test(input) ? input : null);
+    }
+
+    async function updateTrackInfo(videoId) {
+      coverImg.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      try {
+        const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+        const data = await res.json();
+        if (data.title) {
+          const parts = data.title.split(' - ');
+          if (parts.length > 1) {
+            trackArtist.textContent = parts[0].trim();
+            trackTitle.textContent = parts.slice(1).join(' - ').trim();
+          } else {
+            trackTitle.textContent = data.title;
+            trackArtist.textContent = data.author_name || 'YouTube';
+          }
+          pillText.textContent = `${trackArtist.textContent} — ${trackTitle.textContent}`;
+        }
+      } catch (_) {}
+    }
+
+    function loadVideo(videoId) {
+      if (!player) return;
+      updateTrackInfo(videoId);
+      player.loadVideoById(videoId);
+      setPlayingState(true);
+      streamDrawer.classList.remove('is-open');
+    }
+
+    ytLoadBtn.addEventListener('click', () => {
+      const val = ytUrlInput.value.trim();
+      const id = extractYouTubeID(val);
+      if (id) {
+        loadVideo(id);
+      } else {
+        alert('Вставь ссылку на видео YouTube');
+      }
+    });
+
+    ytUrlInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') ytLoadBtn.click();
+    });
+
+    // Скруббер (перемотка тачем)
+    function updateFromPointer(e) {
+      if (!cachedRect) cachedRect = trackWrapper.getBoundingClientRect();
+      const clientX = e.clientX ?? (e.touches && e.touches[0].clientX);
+      const ratio = Math.max(0, Math.min(1, (clientX - cachedRect.left) / cachedWidth));
+      currentSeconds = ratio * totalSeconds;
+      renderProgress();
+    }
+
+    trackWrapper.addEventListener('pointerdown', (e) => {
+      if (!totalSeconds) return;
+      isDragging = true;
+      trackWrapper.classList.add('is-scrubbing');
+      cachedRect = trackWrapper.getBoundingClientRect();
+      cachedWidth = cachedRect.width;
+      trackWrapper.setPointerCapture(e.pointerId);
+      updateFromPointer(e);
+    });
+
+    trackWrapper.addEventListener('pointermove', (e) => {
+      if (isDragging) updateFromPointer(e);
+    });
+
+    function endPointer(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      trackWrapper.classList.remove('is-scrubbing');
+      try { trackWrapper.releasePointerCapture(e.pointerId); } catch (_) {}
+      if (player) player.seekTo(currentSeconds, true);
+    }
+
+    trackWrapper.addEventListener('pointerup', endPointer);
+    trackWrapper.addEventListener('pointercancel', endPointer);
+
+    prevBtn.addEventListener('click', () => {
+      if (!player) return;
+      currentSeconds = Math.max(0, currentSeconds - 15);
+      player.seekTo(currentSeconds, true);
+      renderProgress();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (!player) return;
+      currentSeconds = Math.min(totalSeconds, currentSeconds + 15);
+      player.seekTo(currentSeconds, true);
+      renderProgress();
+    });
+
+    updateTrackInfo('maDrQPge89g');
+  </script>
+</body>
+</html>
+
