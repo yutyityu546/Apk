@@ -35,15 +35,50 @@ jobs:
         npx cap add android
         npx cap sync android
 
-        # Разрешения на фоновое воспроизведение
+        # 1. Разрешения на фоновое воспроизведение и WakeLock
         MANIFEST="android/app/src/main/AndroidManifest.xml"
-        sed -i '/<application/i \    <uses-permission android:name="android.permission.WAKE_LOCK" />\n    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />' $MANIFEST
+        sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.WAKE_LOCK" />\n    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />' $MANIFEST
 
-        # 1. Включаем флаги слияния зависимостей
+        # 2. Переписываем MainActivity.java, чтобы системная пауза блокировки экрана НЕ глушила WebView
+        MAIN_ACTIVITY="android/app/src/main/java/com/atmospheres/player/MainActivity.java"
+        cat << 'EOF' > $MAIN_ACTIVITY
+        package com.atmospheres.player;
+
+        import android.os.Bundle;
+        import android.webkit.WebSettings;
+        import android.webkit.WebView;
+        import com.getcapacitor.BridgeActivity;
+
+        public class MainActivity extends BridgeActivity {
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                
+                if (this.bridge != null && this.bridge.getWebView() != null) {
+                    WebView webView = this.bridge.getWebView();
+                    WebSettings settings = webView.getSettings();
+                    settings.setMediaPlaybackRequiresUserGesture(false);
+                    // Маскируемся под Mac/Десктоп, чтобы YouTube не врубал мобильные ограничения фонового звука
+                    settings.setUserAgentString("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                }
+            }
+
+            @Override
+            public void onPause() {
+                // ПУСТО: отключаем штатную паузу плеера при сворачивании и блокировке экрана
+            }
+
+            @Override
+            public void onStop() {
+                // ПУСТО: запрещаем системе глушить звук при выходе из приложения
+            }
+        }
+        EOF
+
+        # 3. Фиксы зависимостей Kotlin
         echo "android.enableJetifier=true" >> android/gradle.properties
         echo "android.useAndroidX=true" >> android/gradle.properties
 
-        # 2. Исключаем дублирующиеся модули устаревшего Kotlin stdlib
         APP_GRADLE="android/app/build.gradle"
         cat << 'EOF' >> $APP_GRADLE
 
