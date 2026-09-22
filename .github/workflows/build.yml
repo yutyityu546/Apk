@@ -22,7 +22,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '21'
 
     - name: Assemble Project
       run: |
@@ -35,9 +35,9 @@ jobs:
         npx cap add android
         npx cap sync android
         
-        # Включаем разрешения на интернет и фоновую работу
+        # Разрешения на фоновое воспроизведение
         MANIFEST="android/app/src/main/AndroidManifest.xml"
-        sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.WAKE_LOCK" />\n    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />' $MANIFEST
+        sed -i '/<application/i \    <uses-permission android:name="android.permission.WAKE_LOCK" />\n    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />' $MANIFEST
 
     - name: Build Debug APK
       run: |
